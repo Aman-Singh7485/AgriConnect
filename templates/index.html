@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriConnect | Farm to Market</title>
+
+  <style>
+    :root {
+      --green: #2f7d32;
+      --dark-green: #1f5d24;
+      --light-green: #eaf7ea;
+      --gold: #f2b84b;
+      --wheat: #f5deb3;
+      --light-wheat: #fff8e8;
+      --cream: #fffdf5;
+      --white: #ffffff;
+      --text: #1e2a1f;
+      --muted: #68746a;
+      --border: #dce7dc;
+      --shadow: 0 10px 30px rgba(31, 77, 36, 0.12);
+      --radius: 16px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--cream);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      width: min(1140px, 90%);
+      margin: auto;
+    }
+
+    .btn {
+      display: inline-block;
+      border: 2px solid transparent;
+      border-radius: 9px;
+      padding: 11px 18px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--dark-green);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border-color: var(--green);
+      color: var(--green);
+      background: transparent;
+    }
+
+    .btn-outline:hover {
+      background: var(--light-green);
+      transform: translateY(-2px);
+    }
+
+    /* Navbar */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--green);
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .logo span {
+      font-size: 1.7rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      font-size: 0.94rem;
+      font-weight: 700;
+    }
+
+    .nav-links a:hover {
+      color: var(--green);
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .menu-btn {
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      padding: 7px 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 85px 0 75px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top right, #dff4d7 0, transparent 30%),
+        radial-gradient(circle at bottom left, #fff0c5 0, transparent 22%),
+        linear-gradient(135deg, #f7fff3, #fff9e8);
+    }
+
+    .hero-content {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 45px;
+      align-items: center;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 30px;
+      padding: 7px 13px;
+      background: #dff2dc;
+      color: var(--dark-green);
+      font-size: 0.84rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      color: var(--dark-green);
+      font-size: clamp(2.45rem, 5vw, 4.35rem);
+      line-height: 1.12;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 span {
+      color: var(--green);
+    }
+
+    .hero p {
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 27px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .login-note {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .login-note strong {
+      color: var(--green);
+    }
+
+    .hero-visual {
+      position: relative;
+      min-height: 370px;
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 30px;
+      background: linear-gradient(145deg, #1f5d24, #2f7d32, #75ae54);
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-visual::before,
+    .hero-visual::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .hero-visual::before {
+      width: 270px;
+      height: 270px;
+      top: -100px;
+      right: -70px;
+    }
+
+    .hero-visual::after {
+      width: 190px;
+      height: 190px;
+      bottom: -95px;
+      left: -55px;
+    }
+
+    .farm-icon {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 6.8rem;
+      margin-top: 15px;
+    }
+
+    .visual-title {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    .visual-text {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-top: 8px;
+      opacity: 0.9;
+    }
+
+    .mini-card {
+      position: absolute;
+      z-index: 2;
+      padding: 12px 14px;
+      border-radius: 13px;
+      background: var(--white);
+      color: var(--text);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.16);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    .mini-card small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .mini-card.one {
+      left: 22px;
+      bottom: 26px;
+    }
+
+    .mini-card.two {
+      top: 28px;
+      right: 20px;
+    }
+
+    /* General */
+    section {
+      padding: 78px 0;
+    }
+
+    .section-heading {
+      max-width: 700px;
+      margin: 0 auto 38px;
+      text-align: center;
+    }
+
+    .section-heading h2 {
+      color: var(--dark-green);
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+    }
+
+    /* Trust strip */
+    .trust-strip {
+      padding: 18px 0;
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .trust-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 22px;
+      color: var(--dark-green);
+      font-size: 0.88rem;
+      font-weight: 800;
+    }
+
+    /* Platform Statistics */
+    .community-stats {
+      background: #f1f8ef;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 18px;
+      width: 100%;
+    }
+
+    .stat-card {
+      padding: 21px 13px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+      transition: 0.25s ease;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 1000px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+    }
+
+    .stat-card .stat-icon {
+      font-size: 1.7rem;
+      margin-bottom: 7px;
+    }
+
+    .stat-card h3 {
+      color: var(--green);
+      font-size: 1.38rem;
+      margin-bottom: 3px;
+    }
+
+    .stat-card p {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .demo-note {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      text-align: center;
+    }
+
+    /* How it works */
+    .how-it-works {
+      background: var(--white);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .step-card {
+      padding: 24px 20px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--cream);
+      transition: 0.25s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin-bottom: 18px;
+      background: var(--gold);
+      color: #533b00;
+      font-weight: 800;
+    }
+
+    .step-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+
+    .step-card h3 {
+      color: var(--dark-green);
+      font-size: 1.08rem;
+      margin-bottom: 8px;
+    }
+
+    .step-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Features */
+    .features {
+      background: #f0f8ee;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .feature-card {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .feature-icon {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      background: var(--light-green);
+      font-size: 1.5rem;
+    }
+
+    .feature-card h3 {
+      color: var(--dark-green);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    /* Smart recommendation */
+    .smart-match {
+      background: var(--white);
+    }
+
+    .match-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: center;
+      padding: 38px;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #1f5d24, #3f8d42);
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .match-box h2 {
+      font-size: 2rem;
+      margin-bottom: 14px;
+    }
+
+    .match-box>div>p {
+      max-width: 500px;
+      opacity: 0.9;
+    }
+
+    .recommendation-card {
+      padding: 21px;
+      border-radius: 16px;
+      background: var(--white);
+      color: var(--text);
+    }
+
+    .recommendation-card h3 {
+      color: var(--green);
+      margin-bottom: 14px;
+    }
+
+    .recommendation-card p {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 7px;
+    }
+
+    .recommendation-card strong {
+      color: var(--text);
+    }
+
+    .match-badge {
+      display: inline-block;
+      margin-top: 9px;
+      border-radius: 20px;
+      padding: 6px 10px;
+      background: #fff1bd;
+      color: #6d4d00;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    /* Testimonials */
+    .testimonials {
+      background: #f1f8ef;
+    }
+
+    .testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .testimonial-card {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--white);
+    }
+
+    .testimonial-stars {
+      margin-bottom: 12px;
+      color: #df9f19;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-card>p {
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+
+    .testimonial-person {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .person-avatar {
+      display: grid;
+      place-items: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--light-green);
+      font-size: 1.15rem;
+    }
+
+    .testimonial-person h4 {
+      color: var(--dark-green);
+      font-size: 0.88rem;
+    }
+
+    .testimonial-person p {
+      color: var(--muted);
+      font-size: 0.76rem;
+    }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      background: linear-gradient(135deg, #f2b84b, #f7d776);
+    }
+
+    .cta h2 {
+      color: #3f3000;
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    .cta p {
+      max-width: 650px;
+      margin: 0 auto 22px;
+      color: #604b08;
+    }
+
+    .cta .btn-primary {
+      background: var(--dark-green);
+    }
+
+    /* Footer */
+    footer {
+      padding: 45px 0 20px;
+      background: #18351c;
+      color: #d9ead8;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 30px;
+      padding-bottom: 28px;
+    }
+
+    .footer-grid h3,
+    .footer-grid h4 {
+      margin-bottom: 12px;
+      color: var(--white);
+    }
+
+    .footer-grid p,
+    .footer-grid a {
+      color: #c3d7c2;
+      font-size: 0.9rem;
+    }
+
+    .footer-grid a {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .footer-grid a:hover {
+      color: var(--gold);
+    }
+
+    .copyright {
+      padding-top: 18px;
+      border-top: 1px solid rgba(255, 255, 255, 0.15);
+      color: #b6cfb6;
+      text-align: center;
+      font-size: 0.84rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1000px) {
+      .stats-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    @media (max-width: 900px) {
+
+      .hero-content,
+      .match-box {
+        grid-template-columns: 1fr;
+      }
+
+      .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid,
+      .testimonial-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .hero-visual {
+        min-height: 310px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .menu-btn {
+        display: block;
+      }
+
+      .nav-links.mobile-show {
+        position: absolute;
+        left: 5%;
+        right: 5%;
+        top: 72px;
+        display: grid;
+        gap: 8px;
+        padding: 14px;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        background: var(--white);
+        box-shadow: var(--shadow);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .navbar {
+        min-height: 65px;
+      }
+
+      .nav-buttons .btn {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+      }
+
+      .logo {
+        font-size: 1.1rem;
+      }
+
+      .hero {
+        padding: 60px 0;
+      }
+
+      section {
+        padding: 58px 0;
+      }
+
+      .stats-grid,
+      .steps-grid,
+      .features-grid,
+      .testimonial-grid,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trust-list {
+        display: grid;
+        text-align: center;
+        gap: 8px;
+      }
+
+      .match-box {
+        padding: 25px;
+      }
+
+      .hero-visual {
+        min-height: 290px;
+      }
+
+      .farm-icon {
+        font-size: 5.3rem;
+      }
+
+      .hero-actions {
+        display: grid;
+      }
+
+      .hero-actions .btn {
+        text-align: center;
+      }
+
+      .menu-btn {
+        padding: 6px 8px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="container navbar">
+      <a href="index.html" class="logo">
+        <span>🌾</span> AgriConnect
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#how-it-works">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#smart-match">Smart Match</a>
+        <a href="#community">Community</a>
+      </nav>
+
+      <div class="nav-buttons">
+        <a href="login.html" class="btn btn-outline">Login</a>
+        <a href="signup.html" class="btn btn-primary">Sign Up</a>
+        <button class="menu-btn" id="menuButton">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <section class="hero">
+      <div class="container hero-content">
+        <div>
+          <span class="tag">🌱 Direct Farmer-to-Buyer Marketplace</span>
+
+          <h1>Sell Smarter. Buy Better. <span>Grow Together.</span></h1>
+
+          <p>
+            AgriConnect helps farmers sell crops directly to nearby shopkeepers.
+            Compare price, distance, quantity, grade, and farmer ratings before
+            buying grains with confidence.
+          </p>
+
+          <div class="hero-actions">
+            <a href="signup.html" class="btn btn-primary">Join AgriConnect</a>
+            <a href="#how-it-works" class="btn btn-outline">How It Works</a>
+          </div>
+
+          <p class="login-note">
+            <strong>Login required</strong> for orders, cart, notifications,
+            wallet, detailed grain listings, and smart recommendations.
+          </p>
+        </div>
+
+        <div class="hero-visual">
+          <div class="mini-card two">
+            ⭐ Smart Best Match
+            <small>Price + Distance + Quality</small>
+          </div>
+
+          <div class="farm-icon">👨‍🌾</div>
+          <p class="visual-title">Farm to Shop, Directly</p>
+          <p class="visual-text">Fair prices. Better quality. Trusted trade.</p>
+
+          <div class="mini-card one">
+            🌾 Wheat — Grade A
+            <small>₹2,450/q · 30 Quintal · 5 km</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="trust-strip">
+      <div class="container trust-list">
+        <span>✅ Verified Profiles</span>
+        <span>📍 Location-Based Matching</span>
+        <span>🔒 Secure Order Records</span>
+        <span>⭐ Ratings & Reviews</span>
+        <span>🔔 Instant Notifications</span>
+      </div>
+    </section>
+
+    <section class="community-stats" id="community">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Trusted by the AgriConnect Community</h2>
+          <p>
+            A growing direct marketplace for fair, transparent, and efficient
+            grain trading.
+          </p>
+        </div>
+
+        <article class="stat-card">
+          <div class="stat-icon">👨‍🌾</div>
+          <h3 id="farmerCount">{{ total_users }}</h3>
+          <p>Total Registered Users</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon">🏪</div>
+          <h3 id="buyerCount">{{ verified_shopkeepers }}</h3>
+          <p>Verified Shopkeepers</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon">📦</div>
+          <h3 id="orderCount">{{ successful_orders }}</h3>
+          <p>Successful Orders</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon">💰</div>
+          <h3 id="tradeValue">₹{{ "{:,.2f}".format(trade_value) }}</h3>
+          <p>Trade Value</p>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-icon">⭐</div>
+          <h3 id="ratingCount">{{ average_rating }} / 5</h3>
+          <p>Average Rating</p>
+        </article>
+      </div>
+
+      <p class="demo-note">
+        Community statistics are updated from the AgriConnect database.
+      </p>
+      </div>
+    </section>
+
+    <section class="how-it-works" id="how-it-works">
+      <div class="container">
+        <div class="section-heading">
+          <h2>How AgriConnect Works</h2>
+          <p>
+            A simple process that helps farmers sell grains and shopkeepers buy
+            the best available crops nearby.
+          </p>
+        </div>
+
+        <div class="steps-grid">
+          <article class="step-card">
+            <div class="step-number">1</div>
+            <div class="step-icon">👤</div>
+            <h3>Create Account</h3>
+            <p>Sign up as a Farmer to sell crops or a Shopkeeper to buy grains.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">2</div>
+            <div class="step-icon">🌾</div>
+            <h3>List or Discover</h3>
+            <p>Farmers add crop details while buyers compare nearby listings.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">3</div>
+            <div class="step-icon">🛒</div>
+            <h3>Add to Cart & Order</h3>
+            <p>Buyers view full crop details, select quantity, and place an order.</p>
+          </article>
+
+          <article class="step-card">
+            <div class="step-number">4</div>
+            <div class="step-icon">🚚</div>
+            <h3>Delivery & Payment</h3>
+            <p>Track order status, complete payment, and earn Crispy Coins rewards.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="container">
+        <div class="section-heading">
+          <h2>Everything Needed for Fair Trade</h2>
+          <p>
+            Tools for crop discovery, transparent ordering, trusted profiles,
+            payments, and delivery tracking.
+          </p>
+        </div>
+
+        <div class="features-grid">
+          <article class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <h3>Search & Filters</h3>
+            <p>Search crops or farmer names and filter by price, grade, distance, and quantity.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">📍</div>
+            <h3>Location Matching</h3>
+            <p>Discover nearby farmers and shopkeepers using location-based crop matching.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">⭐</div>
+            <h3>Ratings & Reviews</h3>
+            <p>Build trust with buyer and farmer ratings after successful transactions.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">✅</div>
+            <h3>Verified Profiles</h3>
+            <p>Farmer and buyer verification badges improve marketplace confidence.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">📦</div>
+            <h3>Order Tracking</h3>
+            <p>Follow every step from pending order to farmer acceptance and delivery.</p>
+          </article>
+
+          <article class="feature-card">
+            <div class="feature-icon">💳</div>
+            <h3>Wallet & History</h3>
+            <p>Check payment status, wallet records, order history, and earned rewards.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="smart-match" id="smart-match">
+      <div class="container">
+        <div class="match-box">
+          <div>
+            <span class="tag">🤖 Smart Recommendation</span>
+            <h2>Find the Best Grain Option, Not Just the Nearest One</h2>
+            <p>
+              AgriConnect recommends grain listings using price, distance,
+              quality, available quantity, delivery option, transport cost,
+              and farmer rating.
+            </p>
+          </div>
+
+          <div class="recommendation-card">
+            <h3>🌟 Best Match: Ramesh Kumar</h3>
+            <p><strong>Crop:</strong> Wheat</p>
+            <p><strong>Distance:</strong> 5 km</p>
+            <p><strong>Price:</strong> ₹2,450 / Quintal</p>
+            <p><strong>Quantity:</strong> 30 Quintal</p>
+            <p><strong>Quality:</strong> Grade A</p>
+            <p><strong>Delivery:</strong> Pickup / Farmer Delivery</p>
+            <p><strong>Farmer Rating:</strong> ⭐ 4.8 / 5</p>
+            <span class="match-badge">Recommended for better value</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="testimonials">
+      <div class="container">
+        <div class="section-heading">
+          <h2>What Our Community Says</h2>
+          <p>Transparent trade starts with trusted experiences.</p>
+        </div>
+
+        <div class="testimonial-grid">
+          <article class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>
+              “AgriConnect helps me find nearby buyers and clearly show my wheat
+              quantity, quality, and expected price.”
+            </p>
+            <div class="testimonial-person">
+              <div class="person-avatar">👨‍🌾</div>
+              <div>
+                <h4>Ramesh Kumar</h4>
+                <p>Farmer · Greater Noida</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>
+              “I can compare grain prices, farmer ratings, and delivery options
+              before placing a bulk order for my shop.”
+            </p>
+            <div class="testimonial-person">
+              <div class="person-avatar">🏪</div>
+              <div>
+                <h4>Gupta Grain Store</h4>
+                <p>Shopkeeper · Noida</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card">
+            <div class="testimonial-stars">★★★★★</div>
+            <p>
+              “The order updates and verified profile system make the buying
+              and selling process more reliable.”
+            </p>
+            <div class="testimonial-person">
+              <div class="person-avatar">🌾</div>
+              <div>
+                <h4>Suresh Yadav</h4>
+                <p>Farmer · Dadri</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="container">
+        <h2>Ready to Connect Farm and Market?</h2>
+        <p>
+          Create an account to list crops, discover nearby grain suppliers,
+          add grains to cart, place orders, and track deliveries.
+        </p>
+        <a href="signup.html" class="btn btn-primary">Create Your Account</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div>
+        <h3>🌾 AgriConnect</h3>
+        <p>
+          A direct digital marketplace connecting farmers and shopkeepers for
+          fair, transparent, and efficient grain trading.
+        </p>
+      </div>
+
+      <div>
+        <h4>Platform</h4>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#features">Features</a>
+        <a href="#smart-match">Smart Match</a>
+        <a href="#community">Community</a>
+      </div>
+
+      <div>
+        <h4>Account</h4>
+        <a href="login.html">Login</a>
+        <a href="signup.html">Sign Up as Farmer</a>
+        <a href="signup.html">Sign Up as Shopkeeper</a>
+      </div>
+    </div>
+
+    <div class="container copyright">
+      <p>© 2026 AgriConnect. Designed for farmers and shopkeepers.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("menuButton").addEventListener("click", function () {
+      document.getElementById("navLinks").classList.toggle("mobile-show");
+    });
+  </script>
+
+</body>
+
+</html>

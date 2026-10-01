@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer Dashboard | AgriConnect</title>
+
+  <style>
+    :root {
+      --green: #2f7d32;
+      --dark-green: #1f5d24;
+      --light-green: #eaf7ea;
+      --gold: #f2b84b;
+      --wheat: #f5deb3;
+      --light-wheat: #fff8e8;
+      --cream: #fffdf5;
+      --white: #ffffff;
+      --text: #1e2a1f;
+      --muted: #68746a;
+      --border: #dce7dc;
+      --danger: #c83a32;
+      --shadow: 0 10px 30px rgba(31, 77, 36, 0.12);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      background: #f5faf3;
+      color: var(--text);
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .dashboard {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 255px 1fr;
+    }
+
+    .sidebar {
+      background: linear-gradient(180deg, var(--dark-green), #286c2c);
+      color: var(--white);
+      padding: 25px 16px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      font-size: 1.35rem;
+      font-weight: 800;
+      padding: 0 12px 28px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .sidebar-user {
+      margin: 22px 8px;
+      padding: 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.12);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--gold);
+      color: var(--dark-green);
+      font-weight: 800;
+      font-size: 1.05rem;
+      flex-shrink: 0;
+    }
+
+    .sidebar-user h3 {
+      font-size: 0.92rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .sidebar-user p {
+      opacity: 0.78;
+      font-size: 0.76rem;
+      margin-top: 2px;
+    }
+
+    .nav-menu {
+      list-style: none;
+      display: grid;
+      gap: 6px;
+    }
+
+    .nav-menu button {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: #dbeedb;
+      text-align: left;
+      padding: 12px 13px;
+      border-radius: 9px;
+      font-size: 0.94rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-menu button:hover,
+    .nav-menu button.active {
+      background: rgba(255, 255, 255, 0.16);
+      color: var(--white);
+    }
+
+    .logout-btn {
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: transparent;
+      color: var(--white);
+      border-radius: 9px;
+      padding: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: auto;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+    }
+
+    .main-content {
+      padding: 28px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 18px;
+      margin-bottom: 28px;
+    }
+
+    .topbar h1 {
+      font-size: 1.8rem;
+      color: var(--dark-green);
+    }
+
+    .topbar p {
+      color: var(--muted);
+      margin-top: 4px;
+      font-size: 0.93rem;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .notification-btn,
+    .profile-btn {
+      border: 1px solid var(--border);
+      background: var(--white);
+      width: 43px;
+      height: 43px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.05rem;
+      position: relative;
+    }
+
+    .notification-dot {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #e54b43;
+      right: 6px;
+      top: 5px;
+      border: 2px solid var(--white);
+    }
+
+    .btn {
+      border: none;
+      border-radius: 9px;
+      padding: 12px 16px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .btn-primary:hover {
+      background: var(--dark-green);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: var(--white);
+      color: var(--green);
+      border: 1px solid var(--green);
+    }
+
+    .btn-outline:hover {
+      background: var(--light-green);
+    }
+
+    .content-section {
+      display: none;
+    }
+
+    .content-section.active {
+      display: block;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-bottom: 25px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 5px 16px rgba(31, 77, 36, 0.05);
+    }
+
+    .stat-card .icon {
+      width: 44px;
+      height: 44px;
+      display: grid;
+      place-items: center;
+      background: var(--light-green);
+      border-radius: 12px;
+      font-size: 1.35rem;
+      margin-bottom: 15px;
+    }
+
+    .stat-card h3 {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .stat-card strong {
+      display: block;
+      color: var(--dark-green);
+      font-size: 1.55rem;
+      margin-top: 5px;
+    }
+
+    .grid-two {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 20px;
+    }
+
+    .panel {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 22px;
+    }
+
+    .panel-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .panel-heading h2 {
+      color: var(--dark-green);
+      font-size: 1.15rem;
+    }
+
+    .panel-heading button {
+      border: none;
+      background: transparent;
+      color: var(--green);
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .order-item,
+    .history-item {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .order-item:last-child,
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .order-item h3,
+    .history-item h3 {
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .order-item p,
+    .history-item p {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .order-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .small-btn {
+      border: none;
+      padding: 7px 11px;
+      border-radius: 7px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .accept {
+      background: var(--light-green);
+      color: var(--dark-green);
+    }
+
+    .reject {
+      background: #fde9e7;
+      color: var(--danger);
+    }
+
+    .price-card {
+      background: linear-gradient(135deg, #f3faef, #fff9e7);
+      border: 1px solid var(--border);
+      border-radius: 13px;
+      padding: 17px;
+      margin-top: 12px;
+    }
+
+    .price-card h3 {
+      color: var(--dark-green);
+      margin-bottom: 8px;
+    }
+
+    .price-card strong {
+      color: var(--green);
+      font-size: 1.3rem;
+    }
+
+    .price-card p {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 4px;
+    }
+
+    .section-title {
+      color: var(--dark-green);
+      font-size: 1.45rem;
+      margin-bottom: 8px;
+    }
+
+    .section-description {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 22px;
+    }
+
+    .listing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .grain-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    .grain-image {
+      height: 130px;
+      display: grid;
+      place-items: center;
+      font-size: 4rem;
+      background: linear-gradient(135deg, #f8edc7, #ddf0d5);
+    }
+
+    .grain-content {
+      padding: 16px;
+    }
+
+    .grain-content h3 {
+      color: var(--dark-green);
+      margin-bottom: 8px;
+    }
+
+    .grain-details {
+      display: grid;
+      gap: 5px;
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    .status {
+      display: inline-block;
+      margin: 12px 0;
+      padding: 5px 9px;
+      border-radius: 20px;
+      background: var(--light-green);
+      color: var(--dark-green);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .grain-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+    }
+
+    .grain-actions button {
+      border: 1px solid var(--border);
+      background: var(--white);
+      color: var(--green);
+      padding: 8px 4px;
+      border-radius: 7px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .grain-actions button:hover {
+      background: var(--light-green);
+    }
+
+    .grain-actions .delete-btn {
+      color: var(--danger);
+      border-color: #f3c6c2;
+    }
+
+    .grain-actions .delete-btn:hover {
+      background: #fde9e7;
+    }
+
+    .form-card {
+      max-width: 760px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-card label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    .form-card input,
+    .form-card select,
+    .form-card textarea {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 11px 12px;
+      outline: none;
+      color: var(--text);
+    }
+
+    .form-card textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .form-card input:focus,
+    .form-card select:focus,
+    .form-card textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(47, 125, 50, 0.12);
+    }
+
+    .profile-card {
+      max-width: 760px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .profile-cover {
+      min-height: 130px;
+      background: linear-gradient(135deg, var(--dark-green), #69a64d);
+    }
+
+    .profile-body {
+      padding: 0 28px 28px;
+    }
+
+    .profile-avatar {
+      width: 90px;
+      height: 90px;
+      margin-top: -45px;
+      border-radius: 50%;
+      border: 5px solid var(--white);
+      display: grid;
+      place-items: center;
+      background: var(--gold);
+      color: var(--dark-green);
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .profile-header h2 {
+      color: var(--dark-green);
+    }
+
+    .verified {
+      display: inline-block;
+      margin-top: 7px;
+      background: var(--light-green);
+      color: var(--dark-green);
+      padding: 5px 9px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .profile-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 24px;
+    }
+
+    .detail-box {
+      background: #f8fbf7;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 13px;
+    }
+
+    .detail-box span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.76rem;
+      margin-bottom: 4px;
+    }
+
+    .detail-box strong {
+      color: var(--text);
+      font-size: 0.92rem;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 1050px) {
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .listing-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 800px) {
+      .dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: static;
+        height: auto;
+      }
+
+      .sidebar-user {
+        display: none;
+      }
+
+      .nav-menu {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .nav-menu button {
+        font-size: 0.78rem;
+        padding: 9px;
+      }
+
+      .logout-btn {
+        margin-top: 18px;
+      }
+
+      .grid-two {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .main-content {
+        padding: 20px 15px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+      }
+
+      .top-actions .btn {
+        flex: 1;
+      }
+
+      .stats-grid,
+      .listing-grid,
+      .form-grid,
+      .profile-details {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-menu {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .profile-header {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="dashboard">
+
+    <aside class="sidebar">
+      <div class="logo">🌾 AgriConnect</div>
+
+      <div class="sidebar-user">
+        <div class="avatar" id="sidebarAvatar">F</div>
+        <div>
+          <h3 id="sidebarName">Farmer</h3>
+          <p>👨‍🌾 Farmer (Seller)</p>
+        </div>
+      </div>
+
+      <ul class="nav-menu">
+        <li><button class="nav-btn active" data-section="dashboard">📊 Dashboard</button></li>
+        <li><button class="nav-btn" data-section="myGrains">🌾 My Grains</button></li>
+        <li><button class="nav-btn" data-section="addGrain">➕ Add New Grain</button></li>
+        <li><button class="nav-btn" data-section="orders">📦 Orders</button></li>
+        <li><button class="nav-btn" data-section="wallet">💰 Wallet</button></li>
+        <li><button class="nav-btn" data-section="profile">👤 Profile</button></li>
+      </ul>
+
+      <button class="logout-btn" id="logoutBtn">↩ Logout</button>
+    </aside>
+
+    <main class="main-content">
+
+      <header class="topbar">
+        <div>
+          <h1 id="welcomeText">Welcome, Farmer</h1>
+          <p id="locationText">📍 Your location</p>
+        </div>
+
+        <div class="top-actions">
+          <button class="notification-btn" id="notificationButton" title="Notifications">
+            🔔 <span class="notification-dot"></span>
+          </button>
+
+          <button class="profile-btn" id="profileButton" title="Open Profile">👤</button>
+
+          <button class="btn btn-primary" id="quickAddButton">+ Add Grain</button>
+        </div>
+      </header>
+
+      <section id="dashboard" class="content-section active">
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="icon">🌾</div>
+            <h3>Active Listings</h3>
+            <strong id="listingCount">3</strong>
+          </article>
+
+          <article class="stat-card">
+            <div class="icon">📦</div>
+            <h3>Pending Orders</h3>
+            <strong>2</strong>
+          </article>
+
+          <article class="stat-card">
+            <div class="icon">💰</div>
+            <h3>Wallet Balance</h3>
+            <strong>₹18,450</strong>
+          </article>
+
+          <article class="stat-card">
+            <div class="icon">🪙</div>
+            <h3>Crispy Coins</h3>
+            <strong>320</strong>
+          </article>
+        </div>
+
+        <div class="grid-two">
+          <article class="panel">
+            <div class="panel-heading">
+              <h2>Incoming Orders</h2>
+              <button class="nav-link-btn" data-section="orders">View All</button>
+            </div>
+
+            <div id="incomingOrdersPreview">
+              <p class="empty-message">Loading incoming orders...</p>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <h2>Incoming Orders</h2>
+              <button class="nav-link-btn" data-section="orders">View All</button>
+            </div>
+
+            <div id="incomingOrdersPreview">
+              <p class="empty-message">Loading incoming orders...</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="myGrains" class="content-section">
+        <h2 class="section-title">My Grain Listings</h2>
+        <p class="section-description">Manage your listed crops and update availability.</p>
+
+        <div class="listing-grid" id="listingGrid">
+
+          <article class="grain-card">
+            <div class="grain-image">🌾</div>
+            <div class="grain-content">
+              <h3>Wheat</h3>
+              <div class="grain-details">
+                <span>Quantity: 30 Quintal</span>
+                <span>Price: ₹2,450 / Quintal</span>
+                <span>Quality: Grade A</span>
+                <span>Location: <span class="user-location">Your Location</span></span>
+              </div>
+              <span class="status">Available</span>
+              <div class="grain-actions">
+                <button onclick="alert('Edit feature will be added next.')">Edit</button>
+                <button onclick="markSold(this)">Mark Sold</button>
+                <button class="delete-btn" onclick="deleteGrain(this)">Delete</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="grain-card">
+            <div class="grain-image">🍚</div>
+            <div class="grain-content">
+              <h3>Rice</h3>
+              <div class="grain-details">
+                <span>Quantity: 15 Quintal</span>
+                <span>Price: ₹3,200 / Quintal</span>
+                <span>Quality: Grade A</span>
+                <span>Location: <span class="user-location">Your Location</span></span>
+              </div>
+              <span class="status">Available</span>
+              <div class="grain-actions">
+                <button onclick="alert('Edit feature will be added next.')">Edit</button>
+                <button onclick="markSold(this)">Mark Sold</button>
+                <button class="delete-btn" onclick="deleteGrain(this)">Delete</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="grain-card">
+            <div class="grain-image">🌽</div>
+            <div class="grain-content">
+              <h3>Maize</h3>
+              <div class="grain-details">
+                <span>Quantity: 25 Quintal</span>
+                <span>Price: ₹2,100 / Quintal</span>
+                <span>Quality: Grade B</span>
+                <span>Location: <span class="user-location">Your Location</span></span>
+              </div>
+              <span class="status">Available</span>
+              <div class="grain-actions">
+                <button onclick="alert('Edit feature will be added next.')">Edit</button>
+                <button onclick="markSold(this)">Mark Sold</button>
+                <button class="delete-btn" onclick="deleteGrain(this)">Delete</button>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </section>
+
+      <section id="addGrain" class="content-section">
+        <h2 class="section-title">Add New Grain</h2>
+        <p class="section-description">Enter accurate crop information for buyers.</p>
+
+        <form class="form-card" id="grainForm">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="grainName">Grain / Crop Name</label>
+              <input type="text" id="grainName" placeholder="Example: Wheat" required>
+            </div>
+
+            <div class="form-group">
+              <label for="grainImage">Crop Image</label>
+              <input type="file" id="grainImage" accept="image/*">
+            </div>
+
+            <div class="form-group">
+              <label for="quantity">Available Quantity (kg)</label>
+              <input type="number" id="quantity" min="1" step="0.01" placeholder="Example: 500" required>
+            </div>
+
+            <div class="form-group">
+              <label for="price">Price per kg (₹)</label>
+              <input type="number" id="price" min="1" step="0.01" placeholder="Example: 24.50" required>
+            </div>
+
+            <div class="form-group">
+              <label for="quality">Quality / Grade</label>
+              <select id="quality" required>
+                <option value="">Select grade</option>
+                <option>Grade A</option>
+                <option>Grade B</option>
+                <option>Grade C</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="availableDate">Available Date</label>
+              <input type="date" id="availableDate" required>
+            </div>
+
+            <div class="form-group">
+              <label for="grainLocation">Pickup Location</label>
+              <input type="text" id="grainLocation" required>
+            </div>
+
+            <div class="form-group">
+              <label for="deliveryOption">Delivery Option</label>
+              <select id="deliveryOption" required>
+                <option value="">Select option</option>
+                <option>Buyer Pickup</option>
+                <option>Self Delivery</option>
+                <option>Both Available</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="grainDescription">Description</label>
+            <textarea id="grainDescription" placeholder="Crop condition, packaging, moisture level, etc."></textarea>
+          </div>
+
+          <button class="btn btn-primary" type="submit">Publish Grain Listing</button>
+        </form>
+      </section>
+
+      <section id="orders" class="content-section">
+        <h2 class="section-title">Order Management</h2>
+        <p class="section-description">Accept, reject, and track buyer orders.</p>
+
+        <article class="panel">
+          <div id="farmerOrdersList">
+            <p class="empty-message">Loading your orders...</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="wallet" class="content-section">
+        <h2 class="section-title">Wallet & Transaction History</h2>
+        <p class="section-description">Track earnings, payments, and Crispy Coins.</p>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <div class="icon">💰</div>
+            <h3>Available Balance</h3>
+            <strong>₹18,450</strong>
+          </article>
+
+          <article class="stat-card">
+            <div class="icon">📈</div>
+            <h3>Total Earnings</h3>
+            <strong>₹74,500</strong>
+          </article>
+
+          <article class="stat-card">
+            <div class="icon">🪙</div>
+            <h3>Crispy Coins</h3>
+            <strong>320</strong>
+          </article>
+
+          <article class="stat-card">
+            <div class="icon">✅</div>
+            <h3>Completed Sales</h3>
+            <strong>12</strong>
+          </article>
+        </div>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <h2>Recent Transactions</h2>
+            <button onclick="alert('Download feature can be added later.')">Download History</button>
+          </div>
+
+          <div class="history-item">
+            <h3>Payment Received — Maize Order #AG1018</h3>
+            <p>₹31,500 · Completed · 20 August 2026</p>
+          </div>
+
+          <div class="history-item">
+            <h3>Payment Received — Wheat Order #AG1013</h3>
+            <p>₹24,500 · Completed · 16 August 2026</p>
+          </div>
+
+          <div class="history-item">
+            <h3>Crispy Coins Added</h3>
+            <p>+50 Coins for successful delivery · 16 August 2026</p>
+          </div>
+        </article>
+      </section>
+
+      <section id="profile" class="content-section">
+        <h2 class="section-title">My Profile</h2>
+        <p class="section-description">Your registered AgriConnect details.</p>
+
+        <article class="profile-card">
+          <div class="profile-cover"></div>
+
+          <div class="profile-body">
+            <div class="profile-avatar" id="profileAvatar">F</div>
+
+            <div class="profile-header">
+              <div>
+                <h2 id="profileName">Farmer Name</h2>
+                <span class="verified">✅ Farmer (Seller) Profile</span>
+              </div>
+
+              <button class="btn btn-outline" onclick="alert('Profile editing can be added next.')">
+                Edit Profile
+              </button>
+            </div>
+
+            <div class="profile-details">
+              <div class="detail-box">
+                <span>Username</span>
+                <strong id="profileUsername">-</strong>
+              </div>
+
+              <div class="detail-box">
+                <span>Mobile Number</span>
+                <strong id="profileMobile">-</strong>
+              </div>
+
+              <div class="detail-box">
+                <span>Location</span>
+                <strong id="profileLocation">-</strong>
+              </div>
+
+              <div class="detail-box">
+                <span>Account Role</span>
+                <strong>Farmer (Seller)</strong>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+    </main>
+  </div>
+
+  <script>
+    const userData = JSON.parse(localStorage.getItem("agriConnectUser"));
+
+    if (!userData || userData.role !== "farmer") {
+      window.location.href = "login.html";
+    } else {
+      const firstLetter = userData.fullName.charAt(0).toUpperCase();
+
+      document.getElementById("welcomeText").textContent = `Welcome, ${userData.fullName}`;
+      document.getElementById("locationText").textContent = `📍 ${userData.location}`;
+      document.getElementById("sidebarName").textContent = userData.fullName;
+      document.getElementById("sidebarAvatar").textContent = firstLetter;
+
+      document.getElementById("profileName").textContent = userData.fullName;
+      document.getElementById("profileUsername").textContent = userData.username;
+      document.getElementById("profileMobile").textContent = userData.mobile;
+      document.getElementById("profileLocation").textContent = userData.location;
+      document.getElementById("profileAvatar").textContent = firstLetter;
+
+      document.querySelectorAll(".user-location").forEach(function (item) {
+        item.textContent = userData.location;
+      });
+
+      document.getElementById("grainLocation").value = userData.location;
+    }
+
+    const navButtons = document.querySelectorAll(".nav-btn");
+    const sections = document.querySelectorAll(".content-section");
+
+    function showSection(sectionId) {
+      sections.forEach(function (section) {
+        section.classList.remove("active");
+      });
+
+      navButtons.forEach(function (button) {
+        button.classList.remove("active");
+      });
+
+      const selectedSection = document.getElementById(sectionId);
+
+      if (selectedSection) {
+        selectedSection.classList.add("active");
+      }
+
+      const activeButton = document.querySelector(`[data-section="${sectionId}"]`);
+
+      if (activeButton) {
+        activeButton.classList.add("active");
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    navButtons.forEach(function (button) {
+      button.addEventListener("click", function () {
+        showSection(button.dataset.section);
+      });
+    });
+
+    document.querySelectorAll(".nav-link-btn").forEach(function (button) {
+      button.addEventListener("click", function () {
+        showSection(button.dataset.section);
+      });
+    });
+
+    document.getElementById("quickAddButton").addEventListener("click", function () {
+      showSection("addGrain");
+    });
+
+    document.getElementById("profileButton").addEventListener("click", function () {
+      showSection("profile");
+    });
+
+    document.getElementById("notificationButton").addEventListener("click", function () {
+      alert("Notifications will appear here when real-time notifications are added.");
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+      localStorage.removeItem("agriConnectUser");
+      window.location.href = "index.html";
+    });
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function orderActionsHtml(order) {
+      if (order.status === "pending") {
+        return `
+        <button class="small-btn accept"
+          onclick="updateOrderStatus(${order.id}, 'accepted')">
+          Accept Order
+        </button>
+        <button class="small-btn reject"
+          onclick="updateOrderStatus(${order.id}, 'rejected')">
+          Reject Order
+        </button>
+      `;
+      }
+
+      if (order.status === "accepted") {
+        return `
+        <button class="small-btn accept"
+          onclick="updateOrderStatus(${order.id}, 'completed')">
+          Mark as Completed
+        </button>
+      `;
+      }
+
+      return "";
+    }
+
+    function createFullOrderHtml(order) {
+      return `
+      <div class="order-item">
+        <h3>Order #AG${order.id} — ${escapeHtml(order.grain_name)}</h3>
+
+        <p>
+          Buyer: ${escapeHtml(order.buyer_name)}
+          · Quantity: ${Number(order.quantity).toFixed(2)} ${escapeHtml(order.unit)}
+          · Total: ₹${Number(order.total_amount).toLocaleString("en-IN")}
+        </p>
+
+        <p>
+          Delivery: ${escapeHtml(order.delivery_address || "Not provided")}
+          · Status: ${escapeHtml(order.status)}
+        </p>
+
+        <div class="order-actions">
+          ${orderActionsHtml(order)}
+        </div>
+      </div>
+    `;
+    }
+
+    async function getFarmerOrders() {
+      const response = await fetch(`/api/farmer-orders?farmer_id=${userData.id}`);
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Could not load orders.");
+      }
+
+      return result.orders;
+    }
+
+    async function loadFarmerOrders() {
+      const ordersContainer = document.getElementById("farmerOrdersList");
+
+      if (!ordersContainer || !userData || !userData.id) {
+        return;
+      }
+
+      try {
+        const orders = await getFarmerOrders();
+
+        if (orders.length === 0) {
+          ordersContainer.innerHTML =
+            "<p class='empty-message'>No orders received yet.</p>";
+          return;
+        }
+
+        ordersContainer.innerHTML = orders.map(createFullOrderHtml).join("");
+
+      } catch (error) {
+        console.error("Farmer orders error:", error);
+
+        ordersContainer.innerHTML =
+          "<p class='empty-message'>Could not load orders. Please try again.</p>";
+      }
+    }
+
+    async function loadIncomingOrdersPreview() {
+      const previewContainer = document.getElementById("incomingOrdersPreview");
+
+      if (!previewContainer || !userData || !userData.id) {
+        return;
+      }
+
+      try {
+        const orders = await getFarmerOrders();
+
+        const pendingOrders = orders
+          .filter(function (order) {
+            return order.status === "pending";
+          })
+          .slice(0, 2);
+
+        if (pendingOrders.length === 0) {
+          previewContainer.innerHTML =
+            "<p class='empty-message'>No pending orders right now.</p>";
+          return;
+        }
+
+        previewContainer.innerHTML = pendingOrders.map(function (order) {
+          const unitPrice =
+            Number(order.quantity) > 0
+              ? Number(order.total_amount) / Number(order.quantity)
+              : 0;
+
+          return `
+          <div class="order-item">
+            <h3>
+              🏪 ${escapeHtml(order.buyer_name)}
+              ordered ${escapeHtml(order.grain_name)}
+            </h3>
+
+            <p>
+              ${Number(order.quantity).toFixed(2)} ${escapeHtml(order.unit)}
+              · ₹${unitPrice.toLocaleString("en-IN")} / ${escapeHtml(order.unit)}
+              · Order #AG${order.id}
+            </p>
+
+            <div class="order-actions">
+              <button class="small-btn accept"
+                onclick="updateOrderStatus(${order.id}, 'accepted')">
+                Accept
+              </button>
+
+              <button class="small-btn reject"
+                onclick="updateOrderStatus(${order.id}, 'rejected')">
+                Reject
+              </button>
+            </div>
+          </div>
+        `;
+        }).join("");
+
+      } catch (error) {
+        console.error("Incoming order preview error:", error);
+
+        previewContainer.innerHTML =
+          "<p class='empty-message'>Could not load incoming orders.</p>";
+      }
+    }
+
+    async function updateOrderStatus(orderId, status) {
+      const actionLabel = status === "accepted"
+        ? "accept"
+        : status === "rejected"
+          ? "reject"
+          : "mark as completed";
+
+      if (!confirm(`Do you want to ${actionLabel} this order?`)) {
+        return;
+      }
+
+      try {
+        const response = await fetch(`/api/orders/${orderId}/status`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            farmer_id: userData.id,
+            status: status
+          })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.message || "Could not update the order.");
+        }
+
+        alert(result.message);
+
+        loadFarmerOrders();
+        loadIncomingOrdersPreview();
+
+      } catch (error) {
+        console.error("Order status error:", error);
+        alert(error.message);
+      }
+    }
+
+    function markSold(button) {
+      const card = button.closest(".grain-card");
+      const status = card.querySelector(".status");
+
+      status.textContent = "Sold Out";
+      status.style.background = "#fde9e7";
+      status.style.color = "#c83a32";
+
+      button.disabled = true;
+      button.textContent = "Sold";
+
+      alert("Grain listing marked as sold out.");
+    }
+
+    function deleteGrain(button) {
+      if (!confirm("Do you want to delete this grain listing?")) {
+        return;
+      }
+
+      const card = button.closest(".grain-card");
+      card.remove();
+
+      const listingCount = document.getElementById("listingCount");
+      const currentCount = Number(listingCount.textContent);
+
+      if (currentCount > 0) {
+        listingCount.textContent = currentCount - 1;
+      }
+
+      alert("Grain listing deleted successfully.");
+    }
+
+    document.getElementById("grainForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const form = this;
+      const submitButton = form.querySelector('button[type="submit"]');
+
+      if (!userData || !userData.id) {
+        alert("Please log in again. Farmer ID was not found.");
+        window.location.href = "login.html";
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        alert("Your browser does not support location access.");
+        return;
+      }
+
+      submitButton.disabled = true;
+      submitButton.textContent = "Getting location...";
+
+      navigator.geolocation.getCurrentPosition(
+        async function (position) {
+          const payload = {
+            farmer_id: userData.id,
+            grain_name: document.getElementById("grainName").value.trim(),
+            quantity: Number(document.getElementById("quantity").value),
+            price: Number(document.getElementById("price").value),
+            description: document.getElementById("grainDescription").value.trim(),
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+
+          try {
+            submitButton.textContent = "Publishing...";
+
+            const response = await fetch("/api/grain-listings", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+              throw new Error(result.message || "Could not save the listing.");
+            }
+
+            const grainName = payload.grain_name;
+            const quantity = payload.quantity;
+            const price = payload.price;
+            const quality = document.getElementById("quality").value;
+            const grainLocation = document.getElementById("grainLocation").value.trim();
+
+            const newCard = `
+            <article class="grain-card" data-listing-id="${result.listing_id}">
+              <div class="grain-image">🌾</div>
+
+              <div class="grain-content">
+                <h3>${escapeHtml(grainName)}</h3>
+
+                <div class="grain-details">
+                  <span>Available Quantity: ${quantity} kg</span>
+                  <span>Price: ₹${price} / kg</span>
+                  <span>Quality: ${escapeHtml(quality)}</span>
+                  <span>Location: ${escapeHtml(grainLocation)}</span>
+                </div>
+
+                <span class="status">Available</span>
+
+                <div class="grain-actions">
+                  <button onclick="alert('Edit feature will be added next.')">Edit</button>
+                  <button onclick="markSold(this)">Mark Sold</button>
+                  <button class="delete-btn" onclick="deleteGrain(this)">Delete</button>
+                </div>
+              </div>
+            </article>
+          `;
+
+            document.getElementById("listingGrid").insertAdjacentHTML(
+              "afterbegin",
+              newCard
+            );
+
+            const listingCount = document.getElementById("listingCount");
+            listingCount.textContent = Number(listingCount.textContent) + 1;
+
+            form.reset();
+            document.getElementById("grainLocation").value = userData.location;
+
+            alert(`${grainName} has been saved to MySQL successfully.`);
+            showSection("myGrains");
+
+          } catch (error) {
+            console.error("Listing save error:", error);
+            alert(`Listing could not be saved: ${error.message}`);
+
+          } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = "Publish Grain Listing";
+          }
+        },
+
+        function (error) {
+          console.error("Location error:", error);
+
+          submitButton.disabled = false;
+          submitButton.textContent = "Publish Grain Listing";
+
+          alert(
+            "Location permission is required to publish the listing. " +
+            "Please click Allow when your browser asks for location access."
+          );
+        },
+
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    });
+
+    loadFarmerOrders();
+    loadIncomingOrdersPreview();
+  </script>
+
+</body>
+
+</html>

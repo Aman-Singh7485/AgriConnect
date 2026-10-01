@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Report</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        .navbar {
+            background: #0b1f3a;
+            color: white;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar h2 {
+            color: #ff4d4d;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin-left: 25px;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 50px auto;
+        }
+
+        .alert {
+            background: #ffe5e5;
+            border-left: 6px solid #e53935;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .alert h2 {
+            color: #d32f2f;
+            margin-bottom: 8px;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #0b1f3a;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        textarea {
+            height: 100px;
+            resize: none;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            background: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 7px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #b71c1c;
+        }
+
+        .helpline {
+            margin-top: 25px;
+            background: #e8f5e9;
+            padding: 18px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .helpline strong {
+            color: #1b5e20;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="navbar">
+        <h2>VoiceShield</h2>
+
+        <div>
+            <a href="#">Home</a>
+            <a href="#">Dashboard</a>
+            <a href="#">Report Fraud</a>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <div class="alert">
+            <h2>⚠ Possible Fraud Detected</h2>
+            <p>
+                This call has been identified as potentially fraudulent.
+                If you shared any confidential information, please report it immediately.
+            </p>
+        </div>
+
+        <div class="card">
+
+            <h2>🚨 Report Fraud</h2>
+
+            <form>
+
+                <label>Phone Number</label>
+                <input type="tel" placeholder="Enter your phone number">
+
+                <label>Type of Fraud</label>
+                <select>
+                    <option>Select fraud type</option>
+                    <option>Voice Impersonation</option>
+                    <option>Bank Fraud</option>
+                    <option>OTP Fraud</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Information Shared</label>
+                <select>
+                    <option>Select information</option>
+                    <option>OTP</option>
+                    <option>Bank Account Details</option>
+                    <option>Personal Information</option>
+                    <option>Password</option>
+                    <option>Other</option>
+                </select>
+
+                <label>Bank / Service Provider</label>
+                <input type="text" placeholder="Enter bank or service name">
+
+                <label>Describe What Happened</label>
+                <textarea placeholder="Briefly describe the incident..."></textarea>
+
+                <button type="submit">Submit Fraud Report</button>
+
+            </form>
+
+            <div class="helpline">
+                <p>For immediate cyber-fraud assistance</p>
+                <strong>📞 Call 1930</strong>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

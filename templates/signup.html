@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | AgriConnect</title>
+
+    <style>
+        :root {
+            --green: #2f7d32;
+            --dark-green: #1f5d24;
+            --light-green: #eaf7ea;
+            --gold: #f2b84b;
+            --wheat: #f5deb3;
+            --light-wheat: #fff8e8;
+            --cream: #fffdf5;
+            --white: #ffffff;
+            --text: #1e2a1f;
+            --muted: #68746a;
+            --border: #dce7dc;
+            --shadow: 0 10px 30px rgba(31, 77, 36, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at top left, #dff4d7 0, transparent 32%),
+                linear-gradient(135deg, #f7fff3, #fff8e8);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+
+        .signup-wrapper {
+            width: min(1050px, 100%);
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            background: var(--white);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .signup-info {
+            background: linear-gradient(145deg, #1f5d24, #2f7d32, #6fae4c);
+            color: var(--white);
+            padding: 50px 42px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .signup-info::before,
+        .signup-info::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .signup-info::before {
+            width: 260px;
+            height: 260px;
+            top: -105px;
+            right: -105px;
+        }
+
+        .signup-info::after {
+            width: 190px;
+            height: 190px;
+            bottom: -90px;
+            left: -70px;
+        }
+
+        .brand,
+        .info-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .brand {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 75px;
+        }
+
+        .info-content h1 {
+            font-size: 2.3rem;
+            line-height: 1.2;
+            margin-bottom: 15px;
+        }
+
+        .info-content>p {
+            opacity: 0.92;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+
+        .role-box {
+            background: rgba(255, 255, 255, 0.13);
+            border: 1px solid rgba(255, 255, 255, 0.24);
+            border-radius: 14px;
+            padding: 15px;
+            margin-top: 14px;
+        }
+
+        .role-box h3 {
+            font-size: 1rem;
+            margin-bottom: 6px;
+        }
+
+        .role-box p {
+            font-size: 0.88rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .form-area {
+            padding: 42px 45px;
+            background: #fffefb;
+        }
+
+        .back-link {
+            display: inline-block;
+            color: var(--green);
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 22px;
+            text-decoration: none;
+        }
+
+        .back-link:hover,
+        .login-link:hover {
+            color: var(--dark-green);
+        }
+
+        .form-area h2 {
+            color: var(--dark-green);
+            font-size: 2rem;
+            margin-bottom: 7px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 22px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            color: var(--text);
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin-bottom: 7px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 13px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            background: #fcfffc;
+            color: var(--text);
+            font-size: 0.94rem;
+            outline: none;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--green);
+            box-shadow: 0 0 0 3px rgba(47, 125, 50, 0.12);
+        }
+
+        .role-selection {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .role-option {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .role-option input {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .role-card {
+            display: block;
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            background: var(--cream);
+            padding: 14px;
+            text-align: center;
+            transition: 0.25s ease;
+        }
+
+        .role-card span {
+            display: block;
+            font-size: 1.45rem;
+            margin-bottom: 5px;
+        }
+
+        .role-card strong {
+            display: block;
+            color: var(--dark-green);
+            font-size: 0.92rem;
+        }
+
+        .role-card small {
+            display: block;
+            color: var(--muted);
+            font-size: 0.77rem;
+            margin-top: 4px;
+        }
+
+        .role-option input:checked+.role-card {
+            border-color: var(--green);
+            background: var(--light-green);
+            box-shadow: 0 0 0 3px rgba(47, 125, 50, 0.12);
+        }
+
+        .terms {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin: 5px 0 20px;
+        }
+
+        .terms input {
+            width: auto;
+            margin-top: 3px;
+            accent-color: var(--green);
+        }
+
+        .terms a {
+            color: var(--green);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .signup-btn {
+            width: 100%;
+            border: none;
+            border-radius: 9px;
+            padding: 14px;
+            background: var(--green);
+            color: var(--white);
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.25s ease;
+        }
+
+        .signup-btn:hover {
+            background: var(--dark-green);
+            transform: translateY(-2px);
+        }
+
+        .login-text {
+            color: var(--muted);
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 20px;
+        }
+
+        .login-link {
+            color: var(--green);
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+        @media (max-width: 800px) {
+            .signup-wrapper {
+                grid-template-columns: 1fr;
+                max-width: 560px;
+            }
+
+            .signup-info {
+                padding: 35px 30px;
+            }
+
+            .brand {
+                margin-bottom: 35px;
+            }
+
+            .form-area {
+                padding: 35px 30px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 15px;
+            }
+
+            .signup-info,
+            .form-area {
+                padding: 28px 22px;
+            }
+
+            .form-row,
+            .role-selection {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .role-selection {
+                gap: 10px;
+            }
+
+            .info-content h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="signup-wrapper">
+
+        <section class="signup-info">
+            <div class="brand">🌾 AgriConnect</div>
+
+            <div class="info-content">
+                <h1>Join the AgriConnect Community</h1>
+
+                <p>
+                    Connect directly with farmers and shopkeepers for transparent,
+                    reliable, and better grain trading.
+                </p>
+
+                <div class="role-box">
+                    <h3>👨‍🌾 Farmer (Seller)</h3>
+                    <p>List crops, receive orders, manage sales, and track earnings.</p>
+                </div>
+
+                <div class="role-box">
+                    <h3>🏪 Shopkeeper (Buyer)</h3>
+                    <p>Find nearby grains, compare prices, and place orders easily.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="form-area">
+            <a href="index.html" class="back-link">← Return to Home</a>
+
+            <h2>Create Account</h2>
+            <p class="subtitle">Register as a Farmer or Shopkeeper to get started.</p>
+
+            <form id="signupForm">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" placeholder="Create a username" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mobile">Mobile Number</label>
+                        <input type="tel" id="mobile" placeholder="Enter 10-digit number" pattern="[0-9]{10}"
+                            maxlength="10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" placeholder="City / Village" required>
+                    </div>
+                </div>
+
+                <label>Select Your Role</label>
+
+                <div class="role-selection">
+                    <label class="role-option">
+                        <input type="radio" name="role" value="farmer" required>
+                        <span class="role-card">
+                            <span>👨‍🌾</span>
+                            <strong>Farmer</strong>
+                            <small>Sell crops and manage orders</small>
+                        </span>
+                    </label>
+
+                    <label class="role-option">
+                        <input type="radio" name="role" value="shopkeeper" required>
+                        <span class="role-card">
+                            <span>🏪</span>
+                            <strong>Shopkeeper</strong>
+                            <small>Buy grains from nearby farmers</small>
+                        </span>
+                    </label>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" placeholder="Create password" minlength="6" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm password" minlength="6"
+                            required>
+                    </div>
+                </div>
+
+                <label class="terms">
+                    <input type="checkbox" id="terms" required>
+                    <span>I agree to the <a href="#">Terms and Conditions</a>.</span>
+                </label>
+
+                <button type="submit" class="signup-btn">Create Account</button>
+
+                <p class="login-text">
+                    Already have an account?
+                    <a href="login.html" class="login-link">Login here</a>
+                </p>
+
+            </form>
+        </section>
+
+    </main>
+
+<script>
+    document.getElementById("signupForm").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const fullName = document.getElementById("fullName").value.trim();
+        const username = document.getElementById("username").value.trim();
+        const mobile = document.getElementById("mobile").value.trim();
+        const location = document.getElementById("location").value.trim();
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+        const selectedRole = document.querySelector('input[name="role"]:checked');
+
+        if (password !== confirmPassword) {
+            alert("Passwords do not match.");
+            return;
+        }
+
+        if (!selectedRole) {
+            alert("Please select your role.");
+            return;
+        }
+
+        try {
+            const response = await fetch("/api/signup", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    fullName: fullName,
+                    username: username,
+                    mobile: mobile,
+                    location: location,
+                    password: password,
+                    role: selectedRole.value
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok) {
+                alert(result.message || "Could not create account.");
+                return;
+            }
+
+            alert(result.message);
+
+            if (selectedRole.value === "farmer") {
+                window.location.href = "/farmer-dashboard";
+            } else {
+                window.location.href = "/shopkeeper-dashboard";
+            }
+        } catch (error) {
+            alert("Unable to connect to the server. Please try again.");
+        }
+    });
+</script>
+
+</body>
+
+</html>
